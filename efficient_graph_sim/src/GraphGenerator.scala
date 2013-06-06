@@ -3,19 +3,74 @@ import scala.collection.mutable.Queue
 
 object GraphGenerator {
   val rand = new Random
-  //TODO: implement power law generator
-  //TODO: implement power law distribution for labels
-  //TODO: implement gaussian generator
   def generateRandomGraph(size: Int, nLabels: Int, avDegree: Int): Graph = {
+    var nEdges = 0
+    val adjList = Array.ofDim[Set[Int]](size).map( node => {
+      val degree = rand.nextInt(avDegree * 2 + 1)
+      nEdges += degree
+      (0 until degree).map( _ => rand.nextInt(size) ).toSet
+    })
+    val labels = randDistLabels(size, nLabels)
+    var labelMap = Graph.buildLabelMapFromLabels(labels) 
+    println("Nodes:  " + size)
+    println("Edges:  " + nEdges)
+    new Graph(adjList, labels, labelMap)
+  }
+
+  def generateRandomGraphPLLabels(size: Int, nLabels: Int, avDegree: Int): Graph = {
     val adjList = Array.ofDim[Set[Int]](size).map( node => {
       val degree = rand.nextInt(avDegree * 2 + 1)
       (0 until degree).map( _ => rand.nextInt(size) ).toSet
     })
-    val labels = Array.ofDim[Int](size).map( x => rand.nextInt(nLabels) )
+    // 2.1 is used in WWW graph pg 72 of m&m graph data
+    val labels = powDistLabels(size, nLabels, 2.1)
     var labelMap = Graph.buildLabelMapFromLabels(labels) 
     new Graph(adjList, labels, labelMap)
   }
-  
+
+  def generatePLGraphRandLabels(size: Int, nLabels: Int, maxDegree: Int, 
+                                distPow: Double): Graph = {
+    var nEdges = 0
+    val adjList = Array.ofDim[Set[Int]](size).map( node => {
+      val degree = powInt(0, maxDegree, distPow)
+      nEdges += degree
+      (0 until degree).map( _ => rand.nextInt(size)).toSet
+    })
+    val labels = randDistLabels(size, nLabels)
+    var labelMap = Graph.buildLabelMapFromLabels(labels) 
+    println("Nodes:  " + size)
+    println("Edges:  " + nEdges)
+    new Graph(adjList, labels, labelMap)
+  }
+
+  def generatePLGraphPowLabels(size: Int, nLabels: Int, maxDegree: Int, 
+                                distPow: Double): Graph = {
+    val adjList = Array.ofDim[Set[Int]](size).map( node => {
+      val degree = powInt(0, maxDegree, distPow)
+      (0 until degree).map( _ => rand.nextInt(size) ).toSet
+    })
+    val labels = powDistLabels(size, nLabels, distPow)
+    var labelMap = Graph.buildLabelMapFromLabels(labels) 
+    new Graph(adjList, labels, labelMap)
+  }
+
+  def randDistLabels(size: Int, nLabels: Int) = 
+    Array.ofDim[Int](size).map( x => rand.nextInt(nLabels) )
+  def powDistLabels(size: Int, nLabels: Int, pow: Double) = 
+    Array.ofDim[Int](size).map( x => powInt(0, nLabels, pow) )
+  def gaussianDistLabels(size: Int, nLabels: Int) = 
+    Array.ofDim[Int](size).map( x => gaussInt(nLabels/2.0) ) 
+
+  def powInt(min: Int, max: Int, distPow: Double): Int = {
+    max - 1 - math.pow(((math.pow(max, distPow + 1) - 
+               math.pow(min, distPow + 1))*rand.nextDouble + 
+               math.pow(min, distPow + 1)), 
+               (1.0/(distPow + 1))).toInt 
+  }
+  // d: average value of the distribution
+  def gaussInt(d: Double) = 
+    math.min(math.max((rand.nextGaussian()*d+d).toInt, 0), d*2).toInt
+
   def generateRandomConnectedGraph(size: Int, nLabels: Int, avDegree: Int): Graph = {
     val adjList = Array.ofDim[Set[Int]](size).map( node => {
       // min degree 1 guarantees connectedness
@@ -50,9 +105,7 @@ object GraphGenerator {
         if (!newNodeChildren.isEmpty) {
           val nncArr = newNodeChildren.toArray
           for(i <- 0 until rand.nextInt(avDegree * 2 + 1) if nodes.size < size) {
-            val newChild = nncArr.apply(
-              rand.nextInt(newNodeChildren.size)
-            ) 
+            val newChild = nncArr.apply(rand.nextInt(newNodeChildren.size)) 
             if (!(nodes contains newChild)) infinite = false
 
             nodes += newChild
@@ -93,8 +146,25 @@ object GraphGenerator {
 }
 
 object RandomGraphTest extends App {
-  var g = GraphGenerator.generateRandomGraph(10, 5, 2)
+  var g = GraphGenerator.generateRandomGraph(100, 100, 2)
   g.print
+}
+
+object PowerLawLabelTest extends App {
+  var g = GraphGenerator.generateRandomGraphPLLabels(200, 50, 2)
+  //g.print
+  g.labelMap.toSeq.sortBy(_._1).foreach{ println(_) }
+}
+
+object PLGraphRandLabelTest extends App {
+  var g = GraphGenerator.generatePLGraphRandLabels(50, 10, 10, 2.1)
+  g.adjList.sortBy(_.size).foreach{ println(_) }
+}
+
+object PLGraphPowLabelTest extends App {
+  var g = GraphGenerator.generatePLGraphPowLabels(50, 10, 10, 2.1)
+  g.adjList.sortBy(_.size).foreach{ println(_) }
+  g.labelMap.toSeq.sortBy(_._1).foreach{ println(_) }
 }
 
 object QueryGenerationTest extends App {
