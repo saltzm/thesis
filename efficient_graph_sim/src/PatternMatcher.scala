@@ -1,45 +1,7 @@
 import java.io._
+import scala.collection.{mutable => mut}
 
 object PatternMatcher {
-
-  def saltzIso(g: Graph, q: Graph): Set[Array[Set[Int]]] = {
-    var initPhi = saltzDualSim(g, q, feasibleMates(g, q))
-    saltzIso(g, q, initPhi, 0) 
-  }
-
-  def saltzIso(g: Graph, q: Graph, phi: Array[Set[Int]], depth: Int): 
-               Set[Array[Set[Int]]] = {
-    if (depth == q.size) Set(phi)
-    else if (phi.isEmpty) Set[Array[Set[Int]]]()
-    else {
-      var matches = Set[Array[Set[Int]]]()
-      for (i <- phi(depth) if (!phi.slice(0, depth).flatten.contains(i))) {
-        val phiCopy = phi.map(x=>x)
-        phiCopy(depth) = Set[Int](i)
-        matches = matches ++ saltzIso(g, q, saltzDualSim(g, q, phiCopy), depth + 1)
-      }
-      matches
-    }
-  }
-
-  def saltzIso2(g: Graph, q: Graph): Set[Array[Set[Int]]] = {
-    var matches = Set[Array[Set[Int]]]()
-    var initPhi = saltzDualSim(g, q, feasibleMates(g, q))
-    saltzIso_(g, q, initPhi, 0)
-  
-    def saltzIso_(g: Graph, q: Graph, phi: Array[Set[Int]], depth: Int) {
-      //TODO:  check if phi is already an isomorphism?
-      if (depth == q.size) matches += phi 
-      else if (!phi.isEmpty) {
-        for (i <- phi(depth) if (!phi.slice(0, depth).flatten.contains(i))) {
-          val phiCopy = phi.map(x=>x)
-          phiCopy(depth) = Set[Int](i)
-          saltzIso_(g, q, saltzDualSim(g, q, phiCopy), depth + 1)
-        }
-      }
-    }
-    matches 
-  }
 
   def ullmann(g: Graph, q: Graph): Set[Array[Set[Int]]] = {
     var matches = Set[Array[Set[Int]]]()
@@ -81,7 +43,7 @@ object PatternMatcher {
     }
     phi
   }
- 
+
   def saltzIso3(g: Graph, q: Graph): Set[Array[Set[Int]]] = {
     var matches = Set[Array[Set[Int]]]()
     var initPhi = saltzDualSim(g, q, feasibleMates(g, q))
@@ -105,43 +67,10 @@ object PatternMatcher {
     matches 
   }
 
-  def saltzIsoPrint(g: Graph, q: Graph, file: String): Int = {
-    val out = new PrintWriter(file)
-    var nRes = 0
-    var initPhi = saltzDualSim(g, q, feasibleMates(g, q))
-    saltzIso_(g, q, initPhi, 0) 
-  
-    def saltzIso_(g: Graph, q: Graph, phi: Array[Set[Int]], depth: Int) {
-      if (depth == q.size) {
-        out.println("Res " + nRes + ": ")
-        phi.foreach (out.println(_))
-      }
-      else if (!phi.isEmpty) {
-        for (i <- phi(depth) if (!contains(phi, i, depth))) {
-          val phiCopy = phi.map(x=>x)
-          phiCopy(depth) = Set[Int](i)
-          saltzIso_(g, q, saltzDualSim(g, q, phiCopy), depth + 1)
-        }
-      }
-    }
-
-    def contains(phi: Array[Set[Int]], ele: Int, depth: Int): Boolean = {
-      for (i <- 0 until depth) if (phi(i) contains ele) return true
-      false 
-    }
-    out.close
-    nRes
-  }
-
   def saltzDualSim(g: Graph, q: Graph): Array[Set[Int]] = 
     saltzDualSim(g, q, feasibleMates(g, q))
 
-  // TODO: add depth component for isomorphism so you don't check unneccessary
-  //      shit
   def saltzDualSim(g: Graph, q: Graph, phi: Array[Set[Int]]): Array[Set[Int]] = {
-    //val phi = feasibleMates(g, q) 
-    // TODO: check if any of them are empty... Although you find that out 
-    // quickly enough
     var changed = true
     while (changed) {
       changed = false
@@ -162,16 +91,15 @@ object PatternMatcher {
             val phiTemp = g.adjList(phiNode) & phi(qChild)
             if (phiTemp.isEmpty) { 
               phi(qNode) -= phiNode 
-              changed = true  //TODO: possibly implicit?
+              if (phi(qNode).isEmpty) return Array[Set[Int]]()
+              changed = true  
             }
-            //TODO: would mutable make it faster?
             newPhi = newPhi union phiTemp
           }
           // if any phi(i) is empty, then there is no 
           // isomorphic subgraph.
           if (newPhi.isEmpty) return Array[Set[Int]]() 
           if (phi(qChild).size > newPhi.size) changed = true
-          // TODO: would intersect be faster? (doubt it)
           // every node in phi(qChild) must have at least one parent
           // in phi(qNode)
           phi(qChild) = newPhi 
@@ -186,9 +114,7 @@ object PatternMatcher {
 
   def writePhiToFile(phi: Array[Set[Int]], fileName: String) {
     val out = new PrintWriter(fileName)
-    phi.foreach { p =>
-      out.println(p)
-    }
+    phi.foreach { p => out.println(p) }
     out.close
   }
 }

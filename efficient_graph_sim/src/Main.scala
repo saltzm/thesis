@@ -46,22 +46,6 @@ object RGDualSimTest extends App {
   println("Saltz Dual Sim took " + (t1 - t0)/1000000 + " ms")
   println("Found " + sim.flatten.toSet.size + " results.")
 }
-object IsoPrintTest extends App {
-  var t0 = System.nanoTime()
-  val g = GraphGenerator.generateRandomGraph(1000, 10, 6)
-  g.writeToFile("compg.txt")
-  println("Done generating data graph")
-  val q = GraphGenerator.generateBFSQuery(10, 2, g)
-  q.writeToFile("compq.txt")
-  println("Done generating query graph")
-  var t1 = System.nanoTime()
-  val n = PatternMatcher.saltzIsoPrint(g, q, "testres.txt")
-  var t2 = System.nanoTime()
-
-  println("Graph creation time:           " + (t1 - t0)/1000000 + " ms")
-  println("Saltz Iso Print Took           " + (t2 - t1)/1000000 + " ms")
-  println("Number of matches              " + n)
-}
 
 object PowerLawLabelIsoTest extends App {
   var t0 = System.nanoTime()
@@ -79,6 +63,20 @@ object PowerLawLabelIsoTest extends App {
   println("Saltz Iso Took                 " + (t2 - t1)/1000000 + " ms")
   println("Number of matches              " + sim.size)
   println("Number of unique nodes         " + sim.flatten.toSet.size)
+}
+
+object InducedTest extends App {
+  val adjList = Array(Set[Int](1), Set[Int](2), Set[Int]())
+  val labels = Array(0, 1, 2)
+  val labelMap = Map((0,Set(0)), (1, Set(1)), (2, Set(2)))
+  val q = new Graph(adjList, labels, labelMap)
+  q.writeToFile("compq.txt")
+  val gAdjList = adjList.map(x=>x) 
+  gAdjList(2) = Set[Int](0)
+  val g = new Graph(gAdjList, labels, labelMap)
+  g.writeToFile("compg.txt")
+  val sim = PatternMatcher.saltzIso3(g, q)
+  sim.foreach{x => println(x.deep.mkString(", ")) }
 }
 
 object PowerGraphIsoTest extends App {
@@ -132,18 +130,15 @@ object MeVsUllmann extends App {
   println("Number of unique nodes 3   " + meSim.flatten.toSet.size)
 }
 
-object IsoCompTest extends App {
+object RandGraph extends App {
   var t0 = System.nanoTime()
-  val g = GraphGenerator.generateRandomGraph(100, 5, 3)
+  val g = GraphGenerator.generateRandomGraph(1000, 1, 10)
   g.writeToFile("compg.txt")
   println("Done generating data graph")
-  val q = GraphGenerator.generateBFSQuery(3, 2, g)
+  val q = g//GraphGenerator.generateBFSQuery(1000, 2, g)
   q.writeToFile("compq.txt")
   println("Done generating query graph")
   var t1 = System.nanoTime()
-  //val sim = PatternMatcher.saltzIso(g, q)
-  var t2 = System.nanoTime()
-  //val sim2 = PatternMatcher.saltzIso2(g, q)
   var t3 = System.nanoTime()
   val sim3 = PatternMatcher.saltzIso3(g, q)
   var t4 = System.nanoTime()
@@ -156,14 +151,8 @@ object IsoCompTest extends App {
     //i += 1 
   /*}*/
   println("Graph creation time:       " + (t1 - t0)/1000000 + " ms")
-  //println("Saltz Iso Took             " + (t2 - t1)/1000000 + " ms")
-  //println("Saltz Iso 2 Took           " + (t3 - t2)/1000000 + " ms")
   println("Saltz Iso 3 Took           " + (t4 - t3)/1000000 + " ms")
-  //println("Number of matches          " + sim.size)
-  //println("Number of matches 2        " + sim2.size)
   println("Number of matches 3        " + sim3.size)
-  //println("Number of unique nodes     " + sim.flatten.toSet.size)
-  //println("Number of unique nodes 2   " + sim2.flatten.toSet.size)
   println("Number of unique nodes 3   " + sim3.flatten.toSet.size)
  
 }
@@ -190,7 +179,7 @@ object SaltzIsoTest extends App {
   q.writeToFile(q_file)
   //println("Done generating query graph")
   var t1 = System.nanoTime()
-  val sim = PatternMatcher.saltzIso(g, q)
+  val sim = PatternMatcherOld.saltzIso(g, q)
   var t2 = System.nanoTime()
   //var i = 0
 /*  sim.foreach{ x => */
@@ -204,5 +193,4 @@ object SaltzIsoTest extends App {
   println("Scala Total time:                " + (t2 - t0)/1000000 + " ms")
   println("Scala number of matches          " + sim.size)
   println("Scala number of unique nodes     " + sim.flatten.toSet.size)
- 
 }

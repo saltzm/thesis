@@ -6,8 +6,9 @@ import java.io._
 case class Graph(adjList: Array[Set[Int]], 
                  labels: Array[Int], 
                  labelMap: Map[Int, Set[Int]]) {
+
   def size = adjList.size
-  def children(id: Int) = adjList(id)
+
   def print {
     println("adjList: ")
     adjList.foreach { println(_) }
@@ -16,6 +17,7 @@ case class Graph(adjList: Array[Set[Int]],
     println("labelMap: ")
     labelMap.foreach{ case(k, v) => println(k + ": " + v) }
   }
+
   def writeToFile(filename: String) {
     val out = new PrintWriter(filename)
     for (i <- adjList.indices) {
