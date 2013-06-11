@@ -8,6 +8,7 @@ case class Graph(adjList: Array[Set[Int]],
                  labelMap: Map[Int, Set[Int]]) {
 
   def size = adjList.size
+  def nEdges = adjList.foldLeft(0) { (n, i) => n + i.size }
 
   def print {
     println("adjList: ")
@@ -20,8 +21,6 @@ case class Graph(adjList: Array[Set[Int]],
 
   def writeToFile(filename: String) {
     val out = new PrintWriter(filename)
-    println("labels size: "+ labels.size)
-    println("adjList size: " + adjList.size)
     for (i <- adjList.indices) {
       out.println(i + " " + labels(i) + " " + adjList(i).foldLeft("")(
         (str, n) => n + " " + str

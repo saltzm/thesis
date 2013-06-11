@@ -1,4 +1,5 @@
 import scala.io._
+import sys.process._
 
 object YoutubeConverter extends App {
   val lines = Source.fromFile("4.txt").getLines.toArray
@@ -32,30 +33,61 @@ object YoutubeConverter extends App {
     } else { vec }
   }.toArray
   val g = new Graph(adjList, labels, labelMap)
-  println("Number of Edges: "+adjList.foldLeft(0) { (edges, i) =>
-    edges + i.size
-  })
+  println("Youtube number of nodes: " + g.size)
+  println("Number of edges:         " + g.nEdges)
   g.writeToFile("youg.txt")
-  
   println("Done generating data graph")
-  val q = GraphGenerator.generateBFSQuery(10, 3, g)
-  q.writeToFile("youq.txt")
-  println("Done generating query graph")
-  var t1 = System.nanoTime()
-  var t3 = System.nanoTime()
-  val sim3 = PatternMatcher.saltzIso3(g, q)
-  var t4 = System.nanoTime()
 
-  //var i = 0
-/*  sim.foreach{ x => */
-    //println("Result " + i) 
-    //x.foreach{ y => println(y) }
-    //println 
-    //i += 1 
-  /*}*/
-  println("Saltz Iso 3 Took           " + (t4 - t3)/1000000 + " ms")
-  println("Number of matches 3        " + sim3.size)
-  println("Number of unique nodes 3   " + sim3.flatten.toSet.size)
+  val querySizes = Array((2, 1), (4, 2), (6, 2), (8, 2), (10, 2), (20, 2), 
+                         (40, 3), (60, 3), (80, 3), (100, 3))
+  println("BFS queries")
+  for ((s, deg) <- querySizes) {
+    for (i <- 0 until 5) {
+      val q = GraphGenerator.generateBFSQuery(s, deg, g)
+      println("Query size:            " + s)
+      println("Query average degree:  " + deg) 
+      println("Query edges:           " + q.nEdges)
+      q.writeToFile("youq.txt")
+      println("Done generating query graph")
+      var t0 = System.nanoTime()
+      var sim = PatternMatcher.saltzDualSim(g, q)
+      var t1 = System.nanoTime()
+
+      var t3 = System.nanoTime()
+      val sim3 = PatternMatcher.saltzIso3(g, q)
+      var t4 = System.nanoTime()
+      println("Saltz Dual Sim Took        " + (t1 - t0)/1000000.0 + " ms")
+      println("Number of unique nodes d   " + sim.flatten.toSet.size)
+      println("Saltz Iso 3 Took           " + (t4 - t3)/1000000.0 + " ms")
+      println("Number of matches 3        " + sim3.size)
+      println("Number of unique nodes 3   " + sim3.flatten.toSet.size)
+      "./iso_exp.sh youg.txt youq.txt" #| "scala -cp node_counter/out/ NodeCounter" !
+    }
+  }
+
+  println("RANDOM queries")
+  for ((s, deg) <- querySizes) {
+    for (i <- 0 until 5) {
+      val q = GraphGenerator.generateBFSQuery(s, deg, g)
+      println("Query size:            " + s)
+      println("Query average degree:  " + deg) 
+      println("Query edges:           " + q.nEdges)
+      q.writeToFile("youq.txt")
+      println("Done generating query graph")
+      var t0 = System.nanoTime()
+      val sim = PatternMatcher.saltzDualSim(g, q)
+      var t1 = System.nanoTime()
+      var t3 = System.nanoTime()
+      val sim3 = PatternMatcher.saltzIso3(g, q)
+      var t4 = System.nanoTime()
+      println("Saltz Dual Sim Took        " + (t1 - t0)/1000000.0 + " ms")
+      println("Number of unique nodes d   " + sim.flatten.toSet.size)
+      println("Saltz Iso 3 Took           " + (t4 - t3)/1000000.0 + " ms")
+      println("Number of matches 3        " + sim3.size)
+      println("Number of unique nodes 3   " + sim3.flatten.toSet.size)
+      "./iso_exp.sh youg.txt youq.txt" #| "scala -cp node_counter/out/ NodeCounter" !
+    }
+  }
 }
 
 object Main extends App {
