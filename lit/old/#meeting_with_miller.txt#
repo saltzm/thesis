@@ -1,0 +1,26 @@
+Meeting with Miller
+
+Tack on to existing project or start new one?
+
+Research at UGA:
+   What's up with Semantic Web?
+       Determine ways to implicitly generate something like SW 
+   Ramaswamy, Liu seem cool maybe?
+   Anyone doing data analytics research? Predictive systems like Google Now?
+   Extensions on current graph theory research?   
+
+Partner with someone at Tech?
+
+Ideas:
+   Siri voice thing -> learning algorithm that updates pronunciation
+   Learn language from Rosetta Stone --> dumb, this is way too hard
+   Artificial neural network distributed across the web
+       How to leverage the power of users connected to the internet to create intelligence
+   %%BEEN DONE%% Relate users of Spotify using LSA or other similar technique and map them
+   compare twitter users and map
+       convert everything (followers, tweets, etc.) into a document for a user
+   compare images with words?  this would be crazy
+   Relationship between recognition and generation
+       develop general framework for converting between the two? way too hard?
+   comparing ANN's that recognize similar concepts
+       relate internal structure of networks --> do they have a common "seed" 
