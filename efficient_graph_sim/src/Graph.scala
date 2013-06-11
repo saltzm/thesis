@@ -20,6 +20,8 @@ case class Graph(adjList: Array[Set[Int]],
 
   def writeToFile(filename: String) {
     val out = new PrintWriter(filename)
+    println("labels size: "+ labels.size)
+    println("adjList size: " + adjList.size)
     for (i <- adjList.indices) {
       out.println(i + " " + labels(i) + " " + adjList(i).foldLeft("")(
         (str, n) => n + " " + str

@@ -1,3 +1,62 @@
+import scala.io._
+
+object YoutubeConverter extends App {
+  val lines = Source.fromFile("4.txt").getLines.toArray
+  var idMap = Map[String, Int]()
+  var labelStr = Vector[String]()
+  var labelSet = Set[String]()
+  for (l <- lines) {
+    if (!l.trim.equals("")) {
+      val splitLine = l.split("\t").map(_.trim)
+      if (splitLine.length >= 9) {
+        val label = splitLine(3) 
+        labelStr :+= label
+        labelSet += label 
+        idMap += (splitLine(0) -> idMap.size)
+      }
+    }
+  }
+  println(labelSet)
+  val labelArr = labelSet.toArray
+  val labels = labelStr.toArray.map(x => labelArr.indexOf(x))
+  val labelMap = Graph.buildLabelMapFromLabels(labels) 
+  val adjList = lines.foldLeft(Vector[Set[Int]]()) { (vec, x) =>
+    val sx = x.split("\t").map(_.trim)
+    if (sx.length > 9) {
+      vec :+ sx.slice(10, sx.length).foldLeft(Set[Int]()){ (set, x) =>
+        if(idMap.contains(x)) set + idMap(x) 
+        else set 
+      }
+    } else if (sx.length == 9) {
+      vec :+ Set[Int]() 
+    } else { vec }
+  }.toArray
+  val g = new Graph(adjList, labels, labelMap)
+  println("Number of Edges: "+adjList.foldLeft(0) { (edges, i) =>
+    edges + i.size
+  })
+  g.writeToFile("youg.txt")
+  
+  println("Done generating data graph")
+  val q = GraphGenerator.generateBFSQuery(10, 3, g)
+  q.writeToFile("youq.txt")
+  println("Done generating query graph")
+  var t1 = System.nanoTime()
+  var t3 = System.nanoTime()
+  val sim3 = PatternMatcher.saltzIso3(g, q)
+  var t4 = System.nanoTime()
+
+  //var i = 0
+/*  sim.foreach{ x => */
+    //println("Result " + i) 
+    //x.foreach{ y => println(y) }
+    //println 
+    //i += 1 
+  /*}*/
+  println("Saltz Iso 3 Took           " + (t4 - t3)/1000000 + " ms")
+  println("Number of matches 3        " + sim3.size)
+  println("Number of unique nodes 3   " + sim3.flatten.toSet.size)
+}
 
 object Main extends App {
   if (args.length != 4) { 
@@ -132,10 +191,10 @@ object MeVsUllmann extends App {
 
 object RandGraph extends App {
   var t0 = System.nanoTime()
-  val g = GraphGenerator.generateRandomGraph(1000, 1, 10)
+  val g = GraphGenerator.generateRandomGraph(100000, 11, 10)
   g.writeToFile("compg.txt")
   println("Done generating data graph")
-  val q = g//GraphGenerator.generateBFSQuery(1000, 2, g)
+  val q = GraphGenerator.generateBFSQuery(10, 2, g)
   q.writeToFile("compq.txt")
   println("Done generating query graph")
   var t1 = System.nanoTime()
