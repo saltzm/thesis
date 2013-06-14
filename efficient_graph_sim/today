@@ -1,0 +1,22 @@
+
+
+TODO
+
+2 hr   -> get neo4j working
+2 hr   -> get strict working with new program
+2 hr   -> patent conversion and experiment setup
+1 hr   -> convert youtube to run with different sizes 
+          and labels
+1 hr   ->  Write code for all synthetic experiments
+30 min -> Start up experiments on different nodes
+
+
+WHERE I LEFT OFF:
+    installed neo4j
+    writing and importing my generated graphs
+    running small queries
+    NEED TO DO:
+        Indexing
+        automate writing queries as cypher queries 
+            (or, if it's really slow, just forget about it)
+

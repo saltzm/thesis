@@ -28,6 +28,20 @@ case class Graph(adjList: Array[Set[Int]],
     } 
     out.close
   }
+
+  def writeToFileNeo4J(nodeFile: String, edgeFile: String) {
+    val nodeOut = new PrintWriter(nodeFile)
+    nodeOut.println("id\tlabel")
+    labels.foldLeft(1) {(i, l) => nodeOut.println(i+"\t"+l); i+1; }
+    nodeOut.close
+    val edgeOut = new PrintWriter(edgeFile)
+    edgeOut.println("start\tend\ttype")
+    adjList.foldLeft(1) { (i, n) =>
+      n.foreach { c => edgeOut.println(i + "\t" + (c+1) + "\tEDGE") }
+      i + 1
+    }
+    edgeOut.close
+  }
 }
 
 object Graph {
@@ -66,4 +80,10 @@ object GraphWriterTest extends App {
   val g = GraphGenerator.generateRandomGraph(10, 5, 2)
   g.print
   g.writeToFile("g_test.txt")
+}
+
+object Neo4JWriterTest extends App {
+  val g = GraphGenerator.generateRandomGraph(100000, 10, 10)
+  //g.print
+  g.writeToFileNeo4J("batch-import/tnode.csv", "batch-import/trel.csv")
 }

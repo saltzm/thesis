@@ -4,16 +4,12 @@ import scala.collection.mutable.Queue
 object GraphGenerator {
   val rand = new Random
   def generateRandomGraph(size: Int, nLabels: Int, avDegree: Int): Graph = {
-    var nEdges = 0
     val adjList = Array.ofDim[Set[Int]](size).map( node => {
       val degree = rand.nextInt(avDegree * 2 + 1)
-      nEdges += degree
       (0 until degree).map( _ => rand.nextInt(size) ).toSet
     })
     val labels = randDistLabels(size, nLabels)
     var labelMap = Graph.buildLabelMapFromLabels(labels) 
-    println("Nodes:  " + size)
-    println("Edges:  " + nEdges)
     new Graph(adjList, labels, labelMap)
   }
 
