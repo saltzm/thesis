@@ -69,6 +69,30 @@ case class IsoHelper(g: Graph, q: Graph, phi: Array[Set[Int]], depth: Int,
 
 object PatternMatcher {
 
+  def ullmannDual(g: Graph, q: Graph): Set[Array[Set[Int]]] = {
+    var matches = Set[Array[Set[Int]]]()
+    var initPhi = saltzDualSim(g, q)
+    ullmann_(g, q, initPhi, 0) 
+  
+    def ullmann_(g: Graph, q: Graph, phi: Array[Set[Int]], depth: Int) {
+      if (depth == q.size) matches += phi
+      else if (!phi.isEmpty) {
+        for (i <- phi(depth) if (!contains(phi, i, depth))) {
+          val phiCopy = phi.map(x=>x)
+          phiCopy(depth) = Set[Int](i)
+          ullmann_(g, q, refine(g, q, phiCopy), depth + 1)
+        }
+      }
+    }
+
+    def contains(phi: Array[Set[Int]], ele: Int, depth: Int): Boolean = {
+      for (i <- 0 until depth) if (phi(i) contains ele) return true
+      false 
+    }
+    matches 
+  }
+
+
   def ullmann(g: Graph, q: Graph): Set[Array[Set[Int]]] = {
     var matches = Set[Array[Set[Int]]]()
     var initPhi = feasibleMates(g, q)

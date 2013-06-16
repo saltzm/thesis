@@ -194,7 +194,7 @@ object PowerGraphIsoTest extends App {
 
 object MeVsUllmann extends App {
   var t0 = System.nanoTime()
-  val g = GraphGenerator.generateRandomGraph(100000, 7, 16)
+  val g = GraphGenerator.generateRandomGraph(1000000, 30, 16)
   g.writeToFile("compg.txt")
   println("Done generating data graph")
   val q = GraphGenerator.generateBFSQuery(4, 2, g)
@@ -202,13 +202,11 @@ object MeVsUllmann extends App {
   println("Done generating query graph")
   var dSim = PatternMatcher.saltzDualSim(g,q)
   var t1 = System.nanoTime()
-  val ullSim = PatternMatcher.saltzIso4(g, q)
+  val ullSim = PatternMatcher.ullmannDual(g, q)
   var t2 = System.nanoTime()
   val meSim = PatternMatcher.saltzIso3(g, q)
   var t3 = System.nanoTime()
-  dSim.zipWithIndex.sortBy(_._1.size*(-1)).map(_._2) 
-  var t4 = System.nanoTime()
-
+  
   //var i = 0
 /*  sim.foreach{ x => */
     //println("Result " + i) 
@@ -217,9 +215,8 @@ object MeVsUllmann extends App {
     //i += 1 
   /*}*/
   println("Graph creation time:       " + (t1 - t0)/1000000 + " ms")
-  println("Saltz Iso 4 Took           " + (t2 - t1)/1000000 + " ms")
+  println("Ullman Dual Took           " + (t2 - t1)/1000000 + " ms")
   println("Saltz Iso 3 Took           " + (t3 - t2)/1000000 + " ms")
-  println("zipping Took               " + (t4 - t3)/1000000 + " ms")
   println("Number of matches ull      " + ullSim.size)
   println("Number of matches 3        " + meSim.size)
   println("Number of unique nodes ull " + ullSim.flatten.toSet.size)

@@ -132,11 +132,136 @@ object VaryLabelsLarge extends App {
 
 }
 
-object VaryVqSmall extends App {}
-object VaryVqLarge extends App {}
+object VaryVqSmall extends App {
+  val l = 200
+  val repetitions = 0 until 10
+  val outerReps = 0 until 5
+  val querySizes = Array(2, 4, 6, 8, 10, 12, 14, 16, 18, 20) 
+  val queryAvDegree = 2
+  val graphSize = 1000000
+  val graphAvDegree = 16 
 
-object VaryVgRandDegree extends App {}
-object VaryVgPowerDegree extends App {}
+  for (o <- outerReps) {
+    println("Generating rand graph...")
+    var g = GraphGenerator.generateRandomGraph(graphSize, l, graphAvDegree)
+    g.writeToFile("vqgsmall.txt")
+    println("Done generating rand graph...")
+
+    for (vq <- querySizes) {
+      println("QUERY SIZE: " + vq)
+      for (r <- repetitions) {
+        println("Generating query graph...")
+        var q = GraphGenerator.generateBFSQuery(vq, queryAvDegree, g)
+        q.writeToFile("vqqsmall.txt")
+        println("Done generating query...")
+
+        Utils.dualExp(g, q, "rand")
+        Utils.saltzExp(g, q, "rand")
+        Utils.vf2Exp("vqgsmall.txt", "vqqsmall.txt")
+      }
+    }
+  }
+}
+
+object VaryVqLarge extends App {
+  val l = 200
+  val repetitions = 0 until 10
+  val outerReps = 0 until 5
+  val querySizes = Array(20, 30, 40, 50, 100, 200, 300, 400, 500) 
+  val queryAvDegree = 2
+  val graphSize = 1000000
+  val graphAvDegree = 16 
+
+  for (o <- outerReps) {
+    println("Generating rand graph...")
+    var g = GraphGenerator.generateRandomGraph(graphSize, l, graphAvDegree)
+    g.writeToFile("vqglarge.txt")
+    println("Done generating rand graph...")
+
+    for (vq <- querySizes) {
+      println("QUERY SIZE: " + vq)
+      for (r <- repetitions) {
+        println("Generating query graph...")
+        var q = GraphGenerator.generateBFSQuery(vq, queryAvDegree, g)
+        q.writeToFile("vqqlarge.txt")
+        println("Done generating query...")
+
+        Utils.dualExp(g, q, "rand")
+        Utils.saltzExp(g, q, "rand")
+        Utils.vf2Exp("vqglarge.txt", "vqqlarge.txt")
+      }
+    }
+  }
+
+}
+
+object VaryVgRandDegree extends App {
+  val l = 200
+  val repetitions = 0 until 10
+  val outerReps = 0 until 5
+  val querySize = 10
+  val queryAvDegree = 2
+  val graphSizes = Array(1000, 10000, 100000, 1000000, 10000000)
+  val graphAvDegrees = graphSizes.map(math.pow(_, 0.2).toInt) 
+  val graphExps = graphSizes zip graphAvDegrees
+
+  for ((vg, deg) <- graphExps) {
+    println(s"GRAPH SIZE: $vg   DEGREE: $deg")
+    for (o <- outerReps) {
+      println(s"Outer rep $o\n")
+      println("Generating rand graph...")
+      var g = GraphGenerator.generateRandomGraph(vg, l, deg)
+      g.writeToFile("vgrand.txt")
+      println("Done generating rand graph...")
+
+      for (r <- repetitions) {
+        println("Generating query graph...")
+        var q = GraphGenerator.generateBFSQuery(querySize, queryAvDegree, g)
+        q.writeToFile("vqrand.txt")
+        println("Done generating query...")
+
+        Utils.dualExp(g, q, "rand")
+        Utils.saltzExp(g, q, "rand")
+        Utils.vf2Exp("vgrand.txt", "vqrand.txt")
+      }
+    }
+  }
+
+}
+
+object VaryVgPowDegree extends App {
+  val l = 200
+  val repetitions = 0 until 10
+  val outerReps = 0 until 5
+  val querySize = 10
+  val queryAvDegree = 2
+  val graphSizes = Array(1000, 10000, 100000, 1000000, 10000000)
+  val graphMaxDegrees = graphSizes.map(x=>(math.pow(x, 0.2)*4.41).toInt) 
+  val graphExps = graphSizes zip graphMaxDegrees
+  val pow = 2.1
+
+  for ((vg, deg) <- graphExps) {
+    println(s"GRAPH SIZE: $vg   DEGREE: $deg")
+    for (o <- outerReps) {
+      println(s"Outer rep $o\n")
+      println("Generating pow graph...")
+      var g = GraphGenerator.generatePLGraphRandLabels(vg, l, deg, pow)
+      g.writeToFile("vgpow.txt")
+      println("Done generating pow graph...")
+
+      for (r <- repetitions) {
+        println("Generating query graph...")
+        var q = GraphGenerator.generateBFSQuery(querySize, queryAvDegree, g)
+        q.writeToFile("vqpow.txt")
+        println("Done generating query...")
+
+        Utils.dualExp(g, q, "pow")
+        Utils.saltzExp(g, q, "pow")
+        Utils.vf2Exp("vgpow.txt", "vqpow.txt")
+      }
+    }
+  }
+}
 
 object Utils {
   def dualExp(g: Graph, q: Graph, name: String) {
@@ -176,10 +301,10 @@ object Utils {
   }
 
   def time[R](block: => R): (R, Double) = {
-    val t0 = System.currentTimeMillis()
+    val t0 = System.nanoTime()
     val result = block // call-by-name
-    val t1 = System.currentTimeMillis()
-    (result, (t1 - t0))
+    val t1 = System.nanoTime()
+    (result, (t1 - t0)/1000000.0)
   }
 }
 
