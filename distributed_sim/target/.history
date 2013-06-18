@@ -1,0 +1,5 @@
+quit
+exit
+-Xmx2g
+run
+exit
