@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="ivy-report.xsl"?>
+<ivy-report version="1.0">
+	<info
+		organisation="default"
+		module="default-492828"
+		revision="0.1-SNAPSHOT"
+		extra-sbtVersion="0.12"
+		extra-scalaVersion="2.9.2"
+		conf="runtime"
+		confs="compile, runtime, test, provided, optional, compile-internal, runtime-internal, test-internal, plugin, sources, docs, pom"
+		date="20130619010052"/>
+	<dependencies>
+		<module organisation="com.typesafe.sbt" name="sbt-multi-jvm">
+			<revision name="0.3.5" status="release" pubdate="20121219152726" resolver="sbt-plugin-releases" artresolver="sbt-plugin-releases" extra-sbtVersion="0.12" extra-scalaVersion="2.9.2" downloaded="true" searched="true" default="false" conf="default(compile), compile" position="0">
+				<metadata-artifact status="successful" details="" size="1953" time="218" location="/Users/saltzm/.ivy2/cache/scala_2.9.2/sbt_0.12/com.typesafe.sbt/sbt-multi-jvm/ivy-0.3.5.xml" searched="true" original-local-location="/Users/saltzm/.ivy2/cache/scala_2.9.2/sbt_0.12/com.typesafe.sbt/sbt-multi-jvm/ivy-0.3.5.xml.original" origin-is-local="false" origin-location="http://scalasbt.artifactoryonline.com/scalasbt/sbt-plugin-releases/com.typesafe.sbt/sbt-multi-jvm/scala_2.9.2/sbt_0.12/0.3.5/ivys/ivy.xml"/>
+				<caller organisation="default" name="default-492828" conf="compile, runtime" rev="0.3.5" rev-constraint-default="0.3.5" rev-constraint-dynamic="0.3.5" callerrev="0.1-SNAPSHOT" extra-sbtVersion="0.12" extra-scalaVersion="2.9.2"/>
+				<artifacts>
+					<artifact name="sbt-multi-jvm" type="jar" ext="jar" status="successful" details="" size="154261" time="456" location="/Users/saltzm/.ivy2/cache/scala_2.9.2/sbt_0.12/com.typesafe.sbt/sbt-multi-jvm/jars/sbt-multi-jvm-0.3.5.jar">
+						<origin-location is-local="false" location="http://scalasbt.artifactoryonline.com/scalasbt/sbt-plugin-releases/com.typesafe.sbt/sbt-multi-jvm/scala_2.9.2/sbt_0.12/0.3.5/jars/sbt-multi-jvm.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="com.eed3si9n" name="sbt-assembly">
+			<revision name="0.8.5" status="release" pubdate="20121102080814" resolver="sbt-plugin-releases" artresolver="sbt-plugin-releases" extra-sbtVersion="0.12" extra-scalaVersion="2.9.2" downloaded="true" searched="true" default="false" conf="default(compile), compile" position="1">
+				<license name="MIT License" url="https://github.com/sbt/sbt-assembly/blob/master/LICENSE"/>
+				<metadata-artifact status="successful" details="" size="1746" time="204" location="/Users/saltzm/.ivy2/cache/scala_2.9.2/sbt_0.12/com.eed3si9n/sbt-assembly/ivy-0.8.5.xml" searched="true" original-local-location="/Users/saltzm/.ivy2/cache/scala_2.9.2/sbt_0.12/com.eed3si9n/sbt-assembly/ivy-0.8.5.xml.original" origin-is-local="false" origin-location="http://scalasbt.artifactoryonline.com/scalasbt/sbt-plugin-releases/com.eed3si9n/sbt-assembly/scala_2.9.2/sbt_0.12/0.8.5/ivys/ivy.xml"/>
+				<caller organisation="com.typesafe.sbt" name="sbt-multi-jvm" conf="compile" rev="0.8.5" rev-constraint-default="0.8.5" rev-constraint-dynamic="0.8.5" callerrev="0.3.5" extra-sbtVersion="0.12" extra-scalaVersion="2.9.2"/>
+				<artifacts>
+					<artifact name="sbt-assembly" type="jar" ext="jar" status="successful" details="" size="108826" time="336" location="/Users/saltzm/.ivy2/cache/scala_2.9.2/sbt_0.12/com.eed3si9n/sbt-assembly/jars/sbt-assembly-0.8.5.jar">
+						<origin-location is-local="false" location="http://scalasbt.artifactoryonline.com/scalasbt/sbt-plugin-releases/com.eed3si9n/sbt-assembly/scala_2.9.2/sbt_0.12/0.8.5/jars/sbt-assembly.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+	</dependencies>
+</ivy-report>
