@@ -133,7 +133,7 @@ class PatternMatcher(resultHandler: ActorRef,
 
 object PatMatchTest extends App {
   def prepGraphs: Graph = { 
-    val g = GraphGenerator.generateRandomGraph(1000000, 1000, 16)
+    val g = GraphGenerator.generateRandomGraph(10000, 1000, 16)
     g.writeToFiles("dgl.txt", "dge.txt")
     g.writeToFile("dg.txt")
     println("Finished generating graph")
@@ -143,10 +143,13 @@ object PatMatchTest extends App {
     q
   }
   val q = prepGraphs
-  val system = ActorSystem("DistGraphIso", 
+  val masterSystem = ActorSystem("DistGraphIso", 
     ConfigFactory.load.getConfig("graphiso"))
+   
   println("spawning master")
-  val master = system.actorOf(Props[Master].withDispatcher("mydispatcher"))
+  val master = masterSystem.actorOf(
+    Props[Master].withDispatcher("mydispatcher"), "master"
+  )
   master ! SubmitQuery(q)
 }
 
@@ -186,3 +189,4 @@ class Master extends Actor with Stash {
       context.system.shutdown()
   }
 }
+

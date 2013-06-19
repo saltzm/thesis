@@ -12,16 +12,4 @@
 [0m[[0mdebug[0m] [0m	/Users/saltzm/.ivy2/cache/org.uncommons.maths/uncommons-maths/jars/uncommons-maths-1.2.2a.jar[0m
 [0m[[0mdebug[0m] [0mWaiting for thread run-main to exit[0m
 [0m[[0mdebug[0m] [0m	Thread run-main exited.[0m
-[0m[[0mdebug[0m] [0mWaiting for thread DistGraphIso-akka.actor.default-dispatcher-5 to exit[0m
-[0m[[0mdebug[0m] [0m	Thread DistGraphIso-akka.actor.default-dispatcher-5 exited.[0m
-[0m[[0mdebug[0m] [0mWaiting for thread DistGraphIso-akka.actor.default-dispatcher-2 to exit[0m
-[0m[[0mdebug[0m] [0m	Thread DistGraphIso-akka.actor.default-dispatcher-2 exited.[0m
-[0m[[0mdebug[0m] [0mWaiting for thread DistGraphIso-scheduler-1 to exit[0m
-[0m[[0mdebug[0m] [0m	Thread DistGraphIso-scheduler-1 exited.[0m
-[0m[[0mdebug[0m] [0mWaiting for thread DistGraphIso-akka.actor.default-dispatcher-4 to exit[0m
-[0m[[0mdebug[0m] [0m	Thread DistGraphIso-akka.actor.default-dispatcher-4 exited.[0m
-[0m[[0mdebug[0m] [0mWaiting for thread DistGraphIso-akka.actor.default-dispatcher-3 to exit[0m
-[0m[[0mdebug[0m] [0m	Thread DistGraphIso-akka.actor.default-dispatcher-3 exited.[0m
-[0m[[0mdebug[0m] [0mInterrupting remaining threads (should be all daemons).[0m
-[0m[[0mdebug[0m] [0mSandboxed run complete..[0m
-[0m[[0mdebug[0m] [0mExited with code 0[0m
+[0m[[0mdebug[0m] [0mWaiting for thread New I/O server boss #1 ([id: 0x55a9e836, /127.0.0.1:54203]) to exit[0m

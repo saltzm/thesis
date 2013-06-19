@@ -14,7 +14,7 @@
 [0m[[0mdebug[0m] [0m	external source: Set()[0m
 [0m[[0mdebug[0m] [0mInitially invalidated: Set(/Users/saltzm/Documents/code/thesis/distributed_sim/src/main/scala/PatternMatcher.scala)[0m
 [0m[[0minfo[0m] [0mCompiling 1 Scala source to /Users/saltzm/Documents/code/thesis/distributed_sim/target/scala-2.10/classes...[0m
-[0m[[0mdebug[0m] [0mRunning cached compiler 23377225, interfacing (CompilerInterface) with Scala compiler version 2.10.0[0m
+[0m[[0mdebug[0m] [0mRunning cached compiler 3103d7e7, interfacing (CompilerInterface) with Scala compiler version 2.10.0[0m
 [0m[[0mdebug[0m] [0mCalling Scala compiler with arguments  (CompilerInterface):[0m
 [0m[[0mdebug[0m] [0m	-d[0m
 [0m[[0mdebug[0m] [0m	/Users/saltzm/Documents/code/thesis/distributed_sim/target/scala-2.10/classes[0m
@@ -24,10 +24,10 @@
 [0m[[0mdebug[0m] [0m	/Users/saltzm/Documents/code/thesis/distributed_sim/target/scala-2.10/classes:/Users/saltzm/.ivy2/cache/com.typesafe.akka/akka-actor_2.10/bundles/akka-actor_2.10-2.1.4.jar:/Users/saltzm/.ivy2/cache/com.typesafe/config/bundles/config-1.0.0.jar:/Users/saltzm/.ivy2/cache/com.typesafe.akka/akka-remote_2.10/bundles/akka-remote_2.10-2.1.4.jar:/Users/saltzm/.ivy2/cache/io.netty/netty/bundles/netty-3.5.8.Final.jar:/Users/saltzm/.ivy2/cache/com.google.protobuf/protobuf-java/jars/protobuf-java-2.4.1.jar:/Users/saltzm/.ivy2/cache/org.uncommons.maths/uncommons-maths/jars/uncommons-maths-1.2.2a.jar[0m
 [0m[[33mwarn[0m] [0mthere were 1 deprecation warnings; re-run with -deprecation for details[0m
 [0m[[33mwarn[0m] [0mone warning found[0m
-[0m[[0mdebug[0m] [0mScala compilation took 9.738064 s[0m
+[0m[[0mdebug[0m] [0mScala compilation took 9.551001 s[0m
 [0m[[0mdebug[0m] [0mStep 2 changed sources and immdediate dependencies:[0m
-[0m[[0mdebug[0m] [0m	Set()[0m
+[0m[[0mdebug[0m] [0m	Set(/Users/saltzm/Documents/code/thesis/distributed_sim/src/main/scala/PatternMatcher.scala)[0m
 [0m[[0mdebug[0m] [0mNon-trivial strongly connected components: [0m
 [0m[[0mdebug[0m] [0m	[0m
 [0m[[0mdebug[0m] [0mStep 2 invalidated sources:[0m
-[0m[[0mdebug[0m] [0m	Set()[0m
+[0m[[0mdebug[0m] [0m	Set(/Users/saltzm/Documents/code/thesis/distributed_sim/src/main/scala/PatternMatcher.scala)[0m

@@ -91,8 +91,8 @@ class GraphPartition(partitionId: Int, nodesPerPartition :Int,
   extends Actor with ActorLogging {
 
   def receive = {
-
     case PartitionAdjacencyRequest(nodeId, requestor) => 
+      println(self.path)
       requestor ! AdjNodeSet(nodeId, adjList(convertNodeId(nodeId)))
       
     case PartitionLabelRequest(nodeId, requestor) =>
